@@ -5,8 +5,8 @@
 
 class VotingAPI {
     constructor() {
-        // Get base URL from current location, adjust for API endpoints
-        this.baseURL = `${window.location.protocol}//${window.location.hostname}:${window.location.port || 8000}`;
+        // Backend always runs on port 8000
+        this.baseURL = `${window.location.protocol}//${window.location.hostname}:8000`;
         this.apiVersion = 'v1';
     }
 
