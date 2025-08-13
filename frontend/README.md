@@ -1,253 +1,298 @@
-# Team Voting System - Frontend
+# Team Voting System - Modern React Frontend
 
-A modern, responsive web interface for the Team Voting System built with vanilla HTML, CSS, and JavaScript.
+A modern, responsive React application for the Team Voting System built with TypeScript, Tailwind CSS, and cutting-edge web technologies.
 
-## Features
+## 🚀 Tech Stack
 
-### 🏠 Home Page (`index.html`)
-- Welcome message and system overview
-- Live team preview with vote counts
-- How-it-works section with step-by-step guide
-- Responsive hero section with call-to-action buttons
+- **React 18** - Modern UI library with hooks and concurrent features
+- **TypeScript** - Type-safe JavaScript for better reliability and developer experience
+- **Vite** - Next-generation frontend tooling for fast development and building
+- **Tailwind CSS** - Utility-first CSS framework for rapid UI development
+- **Shadcn/UI** - High-quality, accessible UI components built with Radix UI
+- **Framer Motion** - Production-ready motion library for React animations
+- **React Query (@tanstack/react-query)** - Powerful data fetching and state management
+- **React Router** - Declarative routing for single-page applications
+- **Axios** - Promise-based HTTP client for API communication
 
-### 👤 Member Registration (`register.html`)
-- Token-based registration system
-- Real-time form validation
-- QR code support for token input
-- User-friendly error messages
-- Automatic redirect after successful registration
-
-### 🗳️ Voting Interface (`vote.html`)
-- User profile management (view, edit, delete)
-- Team joining/leaving functionality
-- Interactive voting interface with restrictions
-- Vote rollback capability
-- Real-time status updates
-- Token-based login recovery
-
-### 📊 Results Dashboard (`results.html`)
-- Live voting results with auto-refresh
-- Interactive charts (bar chart and pie chart)
-- Detailed results table with rankings
-- Team performance cards
-- Data export functionality (CSV)
-- Real-time statistics
-
-### ⚙️ Admin Panel (`admin.html`)
-- Admin authentication with API key
-- Token generation with QR codes
-- Team management (CRUD operations)
-- Member management (CRUD operations)
-- Bulk operations and data management
-- Modal-based editing interface
-
-## Technical Architecture
-
-### 🎨 Frontend Stack
-- **HTML5**: Semantic markup with accessibility features
-- **CSS3**: Modern styling with CSS Grid/Flexbox, custom properties
-- **Vanilla JavaScript**: ES6+ with async/await, modular code
-- **Chart.js**: Interactive data visualization
-- **Font Awesome**: Icon library
-
-### 🔧 Key Components
-
-#### API Client (`js/api.js`)
-- Centralized API communication
-- Error handling and retry logic
-- Authentication management
-- Request/response interceptors
-- TypeScript-style JSDoc comments
-
-#### Main Application (`js/main.js`)
-- Global application initialization
-- Common utilities and helpers
-- Event handling and state management
-- Notification system
-- Mobile responsiveness
-
-#### Styling (`css/styles.css`)
-- CSS custom properties for theming
-- Responsive design with mobile-first approach
-- Component-based architecture
-- Smooth transitions and animations
-- Dark/light theme ready
-
-## Page Structure
+## 📁 Project Structure
 
 ```
 frontend/
-├── index.html          # Home page
-├── register.html       # Member registration
-├── vote.html          # Voting interface
-├── results.html       # Results dashboard
-├── admin.html         # Admin panel
-├── css/
-│   └── styles.css     # Main stylesheet
-├── js/
-│   ├── api.js         # API client
-│   └── main.js        # Main application logic
-├── images/            # Image assets
-└── README.md          # This file
+├── src/
+│   ├── components/          # Reusable UI components
+│   │   ├── ui/             # Base UI components (Button, Card, Input, etc.)
+│   │   ├── common/         # Common components (Navigation, QR Code, etc.)
+│   │   ├── admin/          # Admin-specific components
+│   │   ├── auth/           # Authentication components
+│   │   └── voting/         # Voting-related components
+│   ├── pages/              # Page components
+│   ├── hooks/              # Custom React hooks
+│   │   ├── api.ts          # API hooks using React Query
+│   │   └── use-toast.ts    # Toast notification hook
+│   ├── lib/                # Utility functions
+│   ├── types/              # TypeScript type definitions
+│   ├── api/                # API client and configuration
+│   ├── App.tsx             # Main app component
+│   ├── main.tsx            # App entry point
+│   └── index.css           # Global styles
+├── public/                 # Static assets
+├── package.json            # Dependencies and scripts
+├── vite.config.ts          # Vite configuration
+├── tailwind.config.js      # Tailwind CSS configuration
+├── tsconfig.json           # TypeScript configuration
+└── README.md               # This file
 ```
 
-## API Integration
-
-The frontend communicates with the FastAPI backend through RESTful endpoints:
-
-### Public Endpoints
-- `GET /v1/teams` - List all teams
-- `GET /v1/teams/{id}/users` - Get team members
-- `GET /v1/voting/count` - Get voting results
-
-### User Endpoints (Cookie Auth)
-- `GET /v1/users/me` - Get current user
-- `PATCH /v1/users/me` - Update profile
-- `DELETE /v1/users/me` - Delete account
-- `POST /v1/users/join/{team_id}` - Join team
-- `POST /v1/users/leave/` - Leave team
-- `POST /v1/voting/{team_id}` - Cast vote
-- `POST /v1/voting/rollback/` - Remove vote
-
-### Admin Endpoints (API Key Auth)
-- `GET /v1/token` - Generate registration token
-- `GET /v1/admin/members` - List all members
-- `POST /v1/admin/member` - Create member
-- `PATCH /v1/admin/member/{id}` - Update member
-- `DELETE /v1/admin/member/{id}` - Delete member
-- `POST /v1/teams` - Create team
-- `PATCH /v1/teams/{id}` - Update team
-- `DELETE /v1/teams/{id}` - Delete team
-
-## Features Breakdown
+## 🎯 Features
 
 ### 🔐 Authentication System
-- Cookie-based session management
-- Token-based registration
-- Admin API key authentication
-- Automatic token cleanup
-- Session recovery with token reset
-
-### 🎯 Voting Logic
-- Prevent self-voting (can't vote for own team)
-- One vote per member
-- Vote rollback functionality
-- Real-time vote counting
-- Anonymous voting results
+- **Token-based registration** with QR code scanning support
+- **Cookie-based session management** for persistent authentication
+- **Admin API key authentication** for administrative functions
+- **Session recovery** with token reset functionality
 
 ### 👥 Team Management
-- Dynamic team creation
-- Avatar support with fallback
-- Member count tracking
-- Team statistics
-- Bulk operations
+- **Join/leave teams** with real-time updates
+- **Team creation and management** (admin only)
+- **Team member visualization** with avatars
+- **Dynamic team statistics** and member counts
 
-### 📱 Responsive Design
-- Mobile-first approach
-- Touch-friendly interfaces
-- Adaptive layouts
-- Progressive enhancement
-- Accessibility compliance
+### 🗳️ Voting System
+- **Interactive voting interface** with team cards
+- **Vote casting and rollback** functionality
+- **Real-time vote counting** with auto-refresh
+- **Voting restrictions** (can't vote for own team, one vote per member)
+- **Visual voting progress** with animations
 
-### 🔄 Real-time Updates
-- Auto-refresh voting results
-- Live team statistics
-- WebSocket ready architecture
-- Page visibility handling
-- Background synchronization
+### 📊 Results Dashboard
+- **Live voting results** with auto-refresh every 30 seconds
+- **Interactive charts and visualizations** with progress bars
+- **Team rankings** with medal system (🥇🥈🥉)
+- **Export functionality** (CSV download)
+- **Comprehensive statistics** (total votes, participation rate, etc.)
 
-## User Workflows
+### ⚙️ Admin Panel
+- **Secure admin authentication** with API key validation
+- **Token generation** with QR code creation
+- **Member management** (create, update, delete)
+- **Team management** (create, update, delete)
+- **System statistics** and monitoring
+- **Bulk operations** and data management
 
-### New Member Registration
-1. Admin generates registration token
-2. Token shared via QR code or URL
-3. Member accesses registration page
-4. Fills form with token, name, username
-5. Account created with authentication cookie
-6. Redirected to voting interface
+### 🎨 Modern UI/UX
+- **Responsive design** that works on all devices
+- **Dark/light theme support** with CSS custom properties
+- **Smooth animations** with Framer Motion
+- **Accessible components** built with Radix UI
+- **Professional color scheme** and typography
+- **Loading states and error handling**
 
-### Voting Process
-1. Member logs in (or uses existing session)
-2. Views available teams
-3. Optionally joins a team
-4. Casts vote for different team
-5. Can change vote using rollback
-6. Views real-time results
+## 🛠️ Development Setup
 
-### Admin Management
-1. Admin logs in with API key
-2. Generates tokens for new members
-3. Manages teams and members
-4. Monitors system statistics
-5. Performs data operations
+### Prerequisites
+- Node.js 18+ and npm/yarn
+- Backend API running on port 8000
 
-## Browser Support
+### Installation
+
+1. **Clone the repository**
+```bash
+cd voting-app/frontend
+```
+
+2. **Install dependencies**
+```bash
+npm install
+```
+
+3. **Configure environment**
+```bash
+# Edit .env file
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+4. **Start development server**
+```bash
+npm run dev
+```
+
+5. **Open browser**
+```
+http://localhost:3000
+```
+
+### Available Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build locally
+- `npm run lint` - Run ESLint for code quality
+
+## 🔧 Configuration
+
+### Environment Variables
+Create a `.env` file in the frontend root:
+
+```env
+VITE_API_BASE_URL=http://localhost:8000
+```
+
+### API Integration
+The frontend communicates with the FastAPI backend through:
+- **Base URL**: Configured via environment variable
+- **Authentication**: Cookie-based sessions and API key headers
+- **Error Handling**: Centralized error processing with user-friendly messages
+- **Request/Response**: JSON format with TypeScript type safety
+
+## 📱 Pages Overview
+
+### 🏠 Home Page (`/`)
+- Welcome message with system overview
+- Live team previews with vote counts
+- Feature showcase with step-by-step process
+- Call-to-action buttons for registration and voting
+
+### 👤 Registration (`/register`)
+- Token-based registration form
+- QR code token input support
+- Real-time form validation
+- Registration process explanation
+
+### 🗳️ Voting Interface (`/vote`)
+- User profile management
+- Team joining/leaving functionality
+- Interactive voting with visual feedback
+- Vote rollback capability
+
+### 📊 Results Dashboard (`/results`)
+- Live voting results with rankings
+- Interactive progress bars and statistics
+- Data export functionality (CSV)
+- Auto-refresh every 30 seconds
+
+### 👤 Profile Page (`/profile`)
+- User profile viewing and editing
+- Account status information
+- Quick action buttons
+- Account deletion (danger zone)
+
+### ⚙️ Admin Panel (`/admin`)
+- Secure admin authentication
+- Token generation with QR codes
+- Team and member management
+- System statistics and monitoring
+
+### 🔑 Login Page (`/login`)
+- Token-based authentication
+- Session recovery functionality
+- Help and guidance information
+
+## 🎨 UI Components
+
+### Core Components
+- **Button** - Multiple variants (default, outline, destructive, ghost)
+- **Card** - Container with header, content, and footer sections
+- **Input** - Form input with validation states
+- **Toast** - Notification system with different types
+
+### Custom Components
+- **QRCodeGenerator** - QR code creation with download/copy functionality
+- **Navigation** - Responsive navigation with mobile menu
+- **AnimatedLayout** - Page transitions with Framer Motion
+
+## 🔄 State Management
+
+### React Query Integration
+- **Caching** - Intelligent caching with automatic invalidation
+- **Background Updates** - Seamless data refreshing
+- **Error Handling** - Centralized error management
+- **Loading States** - Built-in loading state management
+- **Optimistic Updates** - Immediate UI feedback
+
+### Custom Hooks
+- `useCurrentUser()` - Current user data with auto-refresh
+- `useVoteForTeam()` - Vote casting with success/error handling
+- `useAdminMembers()` - Admin member management
+- `useGenerateToken()` - Token generation for admin
+
+## 🚀 Deployment
+
+### Build for Production
+```bash
+npm run build
+```
+
+### Deploy Options
+- **Vercel/Netlify** - Static hosting with automatic deployments
+- **AWS S3 + CloudFront** - Scalable static hosting
+- **Docker** - Containerized deployment
+- **GitHub Pages** - Free static hosting
+
+### Environment Configuration
+- Set `VITE_API_BASE_URL` to your production API endpoint
+- Ensure CORS is configured on the backend
+- Configure proper cookie settings for HTTPS
+
+## 🔒 Security Features
+
+- **XSS Protection** - Safe DOM manipulation and data rendering
+- **CSRF Protection** - Secure cookie configuration
+- **Input Validation** - Client-side validation with type safety
+- **API Key Security** - Secure handling of admin credentials
+- **Content Security Policy** - Ready for CSP implementation
+
+## 🎯 Performance Optimizations
+
+- **Code Splitting** - Automatic route-based code splitting
+- **Tree Shaking** - Dead code elimination
+- **Asset Optimization** - Optimized images and assets
+- **Caching Strategy** - Intelligent data caching with React Query
+- **Bundle Analysis** - Webpack bundle analyzer integration
+
+## 🧪 Testing Strategy
+
+### Recommended Testing Stack
+- **Jest** - Unit testing framework
+- **React Testing Library** - Component testing
+- **MSW** - API mocking for tests
+- **Cypress** - End-to-end testing
+
+### Testing Areas
+- Component rendering and interactions
+- API integration and error handling
+- User workflows (registration, voting, admin)
+- Responsive design and accessibility
+
+## 🌐 Browser Support
 
 - **Modern Browsers**: Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
-- **JavaScript**: ES6+ features (async/await, destructuring, modules)
-- **CSS**: Grid, Flexbox, Custom Properties, CSS3 animations
-- **APIs**: Fetch API, Clipboard API, Notification API
+- **Mobile**: iOS Safari 14+, Chrome Mobile 90+
+- **Features**: ES2020, CSS Grid, Flexbox, CSS Custom Properties
 
-## Performance Optimizations
+## 🤝 Contributing
 
-- Lazy loading of non-critical resources
-- Debounced API calls
-- Efficient DOM manipulation
-- CSS-only animations where possible
-- Minimal JavaScript bundle size
-- Optimized image loading
+1. Follow TypeScript best practices
+2. Use Tailwind CSS for styling
+3. Implement proper error handling
+4. Add JSDoc comments for functions
+5. Ensure accessibility compliance
+6. Test across different browsers
 
-## Security Considerations
+## 🔮 Future Enhancements
 
-- XSS protection with safe DOM manipulation
-- CSRF protection via cookie settings
-- Input validation and sanitization
-- Secure API key handling
-- No sensitive data in localStorage
-- Content Security Policy ready
+- [ ] **WebSocket Integration** - Real-time updates without polling
+- [ ] **PWA Features** - Offline support and app installation
+- [ ] **Multi-language Support** - Internationalization (i18n)
+- [ ] **Advanced Analytics** - Detailed voting analytics dashboard
+- [ ] **Mobile App** - React Native or Capacitor mobile app
+- [ ] **Theme Customization** - User-selectable themes
+- [ ] **Email Notifications** - Voting reminders and updates
+- [ ] **Advanced Charts** - More visualization options
 
-## Future Enhancements
+## 📄 License
 
-- [ ] WebSocket support for real-time updates
-- [ ] Progressive Web App (PWA) features
-- [ ] Dark theme toggle
-- [ ] Multi-language support
-- [ ] Advanced charts and analytics
-- [ ] Bulk import/export functionality
-- [ ] Email notifications
-- [ ] Mobile app using WebView
+This project is part of the Team Voting System. Built with modern web technologies for a superior user experience.
 
-## Development Notes
+---
 
-### Code Style
-- Consistent naming conventions
-- Comprehensive error handling
-- Modular architecture
-- Extensive documentation
-- Type hints via JSDoc
-
-### Testing Strategy
-- Unit tests for utility functions
-- Integration tests for API calls
-- End-to-end tests for user workflows
-- Cross-browser compatibility testing
-- Accessibility testing
-
-### Deployment
-- Static file serving
-- CDN-ready assets
-- Environment configuration
-- Build optimization
-- Cache management
-
-## Contributing
-
-1. Follow the existing code style
-2. Add JSDoc comments for functions
-3. Test across different browsers
-4. Ensure accessibility compliance
-5. Update documentation as needed
-
-## License
-
-This frontend is part of the Team Voting System project.
+**Built with ❤️ using React, TypeScript, and modern web technologies**

@@ -1,101 +1,13 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Team Voting System</title>
-    <link rel="stylesheet" href="css/styles.css">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
-</head>
-<body>
-    <nav class="navbar">
-        <div class="nav-container">
-            <h1><i class="fas fa-vote-yea"></i> Team Voting System</h1>
-            <div class="nav-links">
-                <a href="index.html" class="nav-link active">Home</a>
-                <a href="register.html" class="nav-link">Register</a>
-                <a href="vote.html" class="nav-link">Vote</a>
-                <a href="results.html" class="nav-link">Results</a>
-                <a href="admin.html" class="nav-link">Admin</a>
-            </div>
-        </div>
-    </nav>
-
-    <main class="main-content">
-        <div class="hero-section">
-            <div class="hero-content">
-                <h1>Welcome to Team Voting System</h1>
-                <p class="hero-description">
-                    A democratic voting platform where members can join teams and vote for their favorites.
-                    Get your registration token from an admin and start participating!
-                </p>
-                <div class="hero-buttons">
-                    <a href="register.html" class="btn btn-primary">
-                        <i class="fas fa-user-plus"></i> Get Started
-                    </a>
-                    <a href="vote.html" class="btn btn-secondary">
-                        <i class="fas fa-vote-yea"></i> Vote Now
-                    </a>
-                </div>
-            </div>
-        </div>
-
-        <div class="features-section">
-            <div class="container">
-                <h2>How It Works</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-qrcode"></i>
-                        </div>
-                        <h3>Get Token</h3>
-                        <p>Receive a QR code with registration token from an administrator</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-user-check"></i>
-                        </div>
-                        <h3>Register</h3>
-                        <p>Create your account using the token and join the voting community</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-users"></i>
-                        </div>
-                        <h3>Join Team</h3>
-                        <p>Choose a team to join or participate as an independent voter</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-vote-yea"></i>
-                        </div>
-                        <h3>Vote</h3>
-                        <p>Cast your vote for your favorite team (not your own team)</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="teams-preview">
-            <div class="container">
-                <h2>Current Teams</h2>
-                <div id="teams-list" class="teams-grid">
-                    <div class="loading">Loading teams...</div>
-                </div>
-                <div class="text-center">
-                    <a href="vote.html" class="btn btn-outline">View All Teams</a>
-                </div>
-            </div>
-        </div>
-    </main>
-
-    <footer class="footer">
-        <div class="container">
-            <p>&copy; 2024 Team Voting System. Built with FastAPI and modern web technologies.</p>
-        </div>
-    </footer>
-
-    <script src="js/api.js"></script>
-    <script src="js/main.js"></script>
-</body>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
 </html>
