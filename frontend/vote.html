@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vote - Team Voting System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <h1><i class="fas fa-vote-yea"></i> Team Voting System</h1>
+            <div class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="register.html" class="nav-link">Register</a>
+                <a href="vote.html" class="nav-link active">Vote</a>
+                <a href="results.html" class="nav-link">Results</a>
+                <a href="admin.html" class="nav-link">Admin</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <!-- User Profile Section -->
+            <div id="user-profile" class="form-container hidden">
+                <h2><i class="fas fa-user-circle"></i> My Profile</h2>
+                <div id="profile-info"></div>
+                <div class="mt-4">
+                    <button id="join-team-btn" class="btn btn-secondary hidden">
+                        <i class="fas fa-users"></i> Join a Team
+                    </button>
+                    <button id="leave-team-btn" class="btn btn-warning hidden">
+                        <i class="fas fa-sign-out-alt"></i> Leave Team
+                    </button>
+                    <button id="edit-profile-btn" class="btn btn-outline">
+                        <i class="fas fa-edit"></i> Edit Profile
+                    </button>
+                </div>
+            </div>
+
+            <!-- Team Selection for Joining -->
+            <div id="team-selection" class="form-container hidden">
+                <h3><i class="fas fa-users"></i> Join a Team</h3>
+                <div id="available-teams"></div>
+                <button id="cancel-join" class="btn btn-secondary mt-4">Cancel</button>
+            </div>
+
+            <!-- Edit Profile Form -->
+            <div id="edit-profile-form" class="form-container hidden">
+                <h3><i class="fas fa-edit"></i> Edit Profile</h3>
+                <div id="edit-alerts"></div>
+                <form id="profile-form">
+                    <div class="form-group">
+                        <label for="edit-name" class="form-label">Full Name</label>
+                        <input type="text" id="edit-name" class="form-input" required maxlength="20">
+                    </div>
+                    <div style="display: flex; gap: 1rem;">
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Save Changes
+                        </button>
+                        <button type="button" id="cancel-edit" class="btn btn-secondary">Cancel</button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Voting Section -->
+            <div class="teams-preview">
+                <h2><i class="fas fa-vote-yea"></i> Vote for Your Favorite Team</h2>
+                <div id="voting-alerts"></div>
+                <div id="teams-grid" class="teams-grid">
+                    <div class="loading">
+                        <i class="fas fa-spinner fa-spin"></i> Loading teams...
+                    </div>
+                </div>
+                
+                <div id="current-vote" class="form-container hidden">
+                    <h3><i class="fas fa-check-circle"></i> Your Current Vote</h3>
+                    <div id="vote-info"></div>
+                    <button id="rollback-vote" class="btn btn-danger">
+                        <i class="fas fa-undo"></i> Change Vote
+                    </button>
+                </div>
+            </div>
+
+            <!-- Login Prompt -->
+            <div id="login-prompt" class="form-container">
+                <h2><i class="fas fa-sign-in-alt"></i> Please Login</h2>
+                <p>You need to be registered and logged in to vote.</p>
+                <div class="mt-4">
+                    <a href="register.html" class="btn btn-primary">
+                        <i class="fas fa-user-plus"></i> Register Now
+                    </a>
+                </div>
+                <div class="mt-4">
+                    <h4>Already have an account?</h4>
+                    <div class="form-group">
+                        <label for="reset-token" class="form-label">Enter your token to login</label>
+                        <input type="text" id="reset-token" class="form-input" placeholder="Your authentication token">
+                        <button id="reset-login" class="btn btn-secondary mt-4">
+                            <i class="fas fa-key"></i> Login with Token
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <div class="container">
+            <p>&copy; 2024 Team Voting System. Built with FastAPI and modern web technologies.</p>
+        </div>
+    </footer>
+
+    <script src="js/api.js"></script>
+    <script>
+        let currentUser = null;
+        let teams = [];
+        let userVote = null;
+
+        document.addEventListener('DOMContentLoaded', function() {
+            initializePage();
+        });
+
+        async function initializePage() {
+            try {
+                // Try to get current user
+                currentUser = await api.getCurrentUser();
+                await loadTeams();
+                showUserInterface();
+            } catch (error) {
+                showLoginPrompt();
+            }
+        }
+
+        async function loadTeams() {
+            try {
+                teams = await api.getTeams();
+                renderTeams();
+            } catch (error) {
+                console.error('Failed to load teams:', error);
+                showAlert('voting-alerts', 'Failed to load teams. Please refresh the page.', 'error');
+            }
+        }
+
+        function showUserInterface() {
+            document.getElementById('login-prompt').classList.add('hidden');
+            document.getElementById('user-profile').classList.remove('hidden');
+            
+            renderUserProfile();
+            loadUserVote();
+        }
+
+        function showLoginPrompt() {
+            document.getElementById('login-prompt').classList.remove('hidden');
+            document.getElementById('user-profile').classList.add('hidden');
+        }
+
+        function renderUserProfile() {
+            const profileInfo = document.getElementById('profile-info');
+            const joinBtn = document.getElementById('join-team-btn');
+            const leaveBtn = document.getElementById('leave-team-btn');
+            
+            profileInfo.innerHTML = `
+                <div class="team-stats">
+                    <div class="stat">
+                        <span class="stat-label">Name</span>
+                        <span class="stat-value" style="font-size: 1rem;">${currentUser.name}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Username</span>
+                        <span class="stat-value" style="font-size: 1rem;">${currentUser.username}</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Team Status</span>
+                        <span class="stat-value" style="font-size: 1rem;">
+                            ${currentUser.has_joined_team ? 'In Team' : 'No Team'}
+                        </span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-label">Vote Status</span>
+                        <span class="stat-value" style="font-size: 1rem;">
+                            ${currentUser.has_voted ? 'Voted' : 'Not Voted'}
+                        </span>
+                    </div>
+                </div>
+            `;
+
+            // Show appropriate team action button
+            if (currentUser.has_joined_team) {
+                joinBtn.classList.add('hidden');
+                leaveBtn.classList.remove('hidden');
+            } else {
+                joinBtn.classList.remove('hidden');
+                leaveBtn.classList.add('hidden');
+            }
+        }
+
+        async function loadUserVote() {
+            if (currentUser.has_voted && currentUser.vote_id) {
+                const votedTeam = teams.find(team => team.id === currentUser.vote_id);
+                if (votedTeam) {
+                    userVote = votedTeam;
+                    showCurrentVote(votedTeam);
+                }
+            } else {
+                document.getElementById('current-vote').classList.add('hidden');
+            }
+        }
+
+        function showCurrentVote(team) {
+            const voteInfo = document.getElementById('vote-info');
+            const currentVoteDiv = document.getElementById('current-vote');
+            
+            voteInfo.innerHTML = `
+                <div class="team-header">
+                    <div class="team-avatar">${team.name.charAt(0)}</div>
+                    <div class="team-name">${team.name}</div>
+                </div>
+                <p>You have voted for this team.</p>
+            `;
+            
+            currentVoteDiv.classList.remove('hidden');
+        }
+
+        function renderTeams() {
+            const grid = document.getElementById('teams-grid');
+            
+            if (teams.length === 0) {
+                grid.innerHTML = '<div class="loading">No teams available</div>';
+                return;
+            }
+
+            grid.innerHTML = teams.map(team => `
+                <div class="team-card ${canVoteForTeam(team) ? '' : 'disabled'}" data-team-id="${team.id}">
+                    <div class="team-header">
+                        <div class="team-avatar">
+                            ${team.avatar ? `<img src="${team.avatar}" alt="${team.name}">` : team.name.charAt(0)}
+                        </div>
+                        <div class="team-name">${team.name}</div>
+                    </div>
+                    
+                    ${!canVoteForTeam(team) ? `
+                        <div class="alert alert-warning" style="margin: 1rem 0;">
+                            ${getVoteDisabledReason(team)}
+                        </div>
+                    ` : ''}
+                    
+                    <div class="mt-4">
+                        <button 
+                            class="btn ${canVoteForTeam(team) ? 'btn-primary' : 'btn-secondary'}" 
+                            onclick="handleVote(${team.id})"
+                            ${!canVoteForTeam(team) ? 'disabled' : ''}
+                            style="width: 100%; justify-content: center;"
+                        >
+                            <i class="fas fa-vote-yea"></i> 
+                            ${currentUser && currentUser.vote_id === team.id ? 'Voted' : 'Vote'}
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function canVoteForTeam(team) {
+            if (!currentUser) return false;
+            if (currentUser.has_voted) return false;
+            if (currentUser.team_id === team.id) return false;
+            return true;
+        }
+
+        function getVoteDisabledReason(team) {
+            if (!currentUser) return 'Login required';
+            if (currentUser.has_voted) return 'You have already voted';
+            if (currentUser.team_id === team.id) return 'Cannot vote for your own team';
+            return 'Voting disabled';
+        }
+
+        async function handleVote(teamId) {
+            if (!canVoteForTeam(teams.find(t => t.id === teamId))) return;
+
+            try {
+                await api.voteForTeam(teamId);
+                showAlert('voting-alerts', 'Vote cast successfully!', 'success');
+                
+                // Refresh user data
+                currentUser = await api.getCurrentUser();
+                renderUserProfile();
+                renderTeams();
+                loadUserVote();
+                
+            } catch (error) {
+                let errorMessage = 'Failed to cast vote. Please try again.';
+                if (error.message.includes('400')) {
+                    errorMessage = 'Cannot vote for your own team or you have already voted.';
+                }
+                showAlert('voting-alerts', errorMessage, 'error');
+            }
+        }
+
+        // Team management
+        document.getElementById('join-team-btn').addEventListener('click', function() {
+            showTeamSelection();
+        });
+
+        document.getElementById('leave-team-btn').addEventListener('click', async function() {
+            if (confirm('Are you sure you want to leave your team?')) {
+                try {
+                    await api.leaveTeam();
+                    currentUser = await api.getCurrentUser();
+                    renderUserProfile();
+                    renderTeams();
+                    showAlert('voting-alerts', 'Left team successfully!', 'success');
+                } catch (error) {
+                    showAlert('voting-alerts', 'Failed to leave team.', 'error');
+                }
+            }
+        });
+
+        function showTeamSelection() {
+            const availableTeams = document.getElementById('available-teams');
+            availableTeams.innerHTML = teams.map(team => `
+                <div class="team-card" style="cursor: pointer;" onclick="joinTeam(${team.id})">
+                    <div class="team-header">
+                        <div class="team-avatar">${team.name.charAt(0)}</div>
+                        <div class="team-name">${team.name}</div>
+                    </div>
+                    <button class="btn btn-primary" style="width: 100%; justify-content: center;">
+                        <i class="fas fa-users"></i> Join This Team
+                    </button>
+                </div>
+            `).join('');
+            
+            document.getElementById('team-selection').classList.remove('hidden');
+            document.getElementById('user-profile').classList.add('hidden');
+        }
+
+        async function joinTeam(teamId) {
+            try {
+                await api.joinTeam(teamId);
+                currentUser = await api.getCurrentUser();
+                hideTeamSelection();
+                renderUserProfile();
+                renderTeams();
+                showAlert('voting-alerts', 'Joined team successfully!', 'success');
+            } catch (error) {
+                showAlert('voting-alerts', 'Failed to join team.', 'error');
+            }
+        }
+
+        document.getElementById('cancel-join').addEventListener('click', hideTeamSelection);
+
+        function hideTeamSelection() {
+            document.getElementById('team-selection').classList.add('hidden');
+            document.getElementById('user-profile').classList.remove('hidden');
+        }
+
+        // Profile editing
+        document.getElementById('edit-profile-btn').addEventListener('click', function() {
+            document.getElementById('edit-name').value = currentUser.name;
+            document.getElementById('edit-profile-form').classList.remove('hidden');
+            document.getElementById('user-profile').classList.add('hidden');
+        });
+
+        document.getElementById('cancel-edit').addEventListener('click', function() {
+            document.getElementById('edit-profile-form').classList.add('hidden');
+            document.getElementById('user-profile').classList.remove('hidden');
+        });
+
+        document.getElementById('profile-form').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            const name = document.getElementById('edit-name').value.trim();
+            
+            try {
+                await api.updateProfile({ name });
+                currentUser = await api.getCurrentUser();
+                document.getElementById('edit-profile-form').classList.add('hidden');
+                document.getElementById('user-profile').classList.remove('hidden');
+                renderUserProfile();
+                showAlert('voting-alerts', 'Profile updated successfully!', 'success');
+            } catch (error) {
+                showAlert('edit-alerts', 'Failed to update profile.', 'error');
+            }
+        });
+
+        // Vote rollback
+        document.getElementById('rollback-vote').addEventListener('click', async function() {
+            if (confirm('Are you sure you want to remove your current vote?')) {
+                try {
+                    await api.rollbackVote();
+                    currentUser = await api.getCurrentUser();
+                    renderUserProfile();
+                    renderTeams();
+                    document.getElementById('current-vote').classList.add('hidden');
+                    showAlert('voting-alerts', 'Vote removed successfully! You can now vote again.', 'success');
+                } catch (error) {
+                    showAlert('voting-alerts', 'Failed to remove vote.', 'error');
+                }
+            }
+        });
+
+        // Token login
+        document.getElementById('reset-login').addEventListener('click', async function() {
+            const token = document.getElementById('reset-token').value.trim();
+            if (!token) {
+                alert('Please enter your token');
+                return;
+            }
+            
+            try {
+                await api.resetCookie(token);
+                location.reload();
+            } catch (error) {
+                alert('Failed to login with token');
+            }
+        });
+
+        function showAlert(containerId, message, type) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = `
+                <div class="alert alert-${type}">
+                    ${message}
+                </div>
+            `;
+            setTimeout(() => {
+                container.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
