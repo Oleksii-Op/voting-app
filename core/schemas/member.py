@@ -50,5 +50,11 @@ class MemberOut(BaseModel):
     )
 
 
+class TeamMembers(BaseModel):
+    name: str
+    members: list[MemberOutTeam]
+    avatar: str
+
+
 class MemberList(BaseModel):
     name: str

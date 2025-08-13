@@ -2,9 +2,6 @@ from typing import TYPE_CHECKING
 
 from pydantic import BaseModel, ConfigDict
 
-if TYPE_CHECKING:
-    from core.schemas import MemberOutTeam
-
 
 class TeamIn(BaseModel):
     name: str
@@ -12,12 +9,6 @@ class TeamIn(BaseModel):
     model_config = ConfigDict(
         from_attributes=True,
     )
-
-
-class TeamMembers(BaseModel):
-    name: str
-    members: list["MemberOutTeam"]
-    avatar: str
 
 
 class TeamOut(TeamIn):

@@ -13,7 +13,7 @@ __all__ = (
 )
 
 
-from .team import TeamIn, TeamUpdate, TeamOut, TeamMembers
+from .team import TeamIn, TeamUpdate, TeamOut
 from .member import (
     MemberList,
     MemberInAdmin,
@@ -22,4 +22,5 @@ from .member import (
     MemberUpdate,
     MemberUpdateAdmin,
     MemberOutTeam,
+    TeamMembers,
 )
