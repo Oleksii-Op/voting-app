@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosResponse } from 'axios'
+import axios, { AxiosInstance } from 'axios'
 import { 
   Member, 
   Team, 
@@ -9,8 +9,7 @@ import {
   TeamCreate,
   TeamUpdate,
   AdminMemberCreate,
-  AdminMemberUpdate,
-  ApiError 
+  AdminMemberUpdate 
 } from '@/types'
 
 class VotingAPIClient {

@@ -124,7 +124,7 @@ export default function ResultsPage() {
           <Card>
             <CardContent className="p-6 text-center">
               <div className="text-3xl font-bold text-purple-600 mb-2">
-                {teams?.length > 0 ? Math.round(((votingResults?.length || 0) / teams.length) * 100) : 0}%
+                {(teams?.length || 0) > 0 ? Math.round(((votingResults?.length || 0) / (teams?.length || 1)) * 100) : 0}%
               </div>
               <div className="text-gray-600">Participation</div>
             </CardContent>
