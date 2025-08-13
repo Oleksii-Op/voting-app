@@ -1,5 +1,9 @@
+from typing import TYPE_CHECKING
+
 from pydantic import BaseModel, ConfigDict
-from core.schemas import MemberOutTeam
+
+if TYPE_CHECKING:
+    from core.schemas import MemberOutTeam
 
 
 class TeamIn(BaseModel):
@@ -12,7 +16,7 @@ class TeamIn(BaseModel):
 
 class TeamMembers(BaseModel):
     name: str
-    members: list[MemberOutTeam]
+    members: list["MemberOutTeam"]
     avatar: str
 
 

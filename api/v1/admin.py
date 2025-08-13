@@ -84,7 +84,7 @@ def create_user(
     session.add(member_db)
     session.commit()
     logger.warning(
-        "Administrator has create a new user %s",
+        "Administrator has created a new user %s",
         member_db.username,
     )
     return member_db
@@ -108,9 +108,10 @@ def update_user(
         exclude_unset=True,
     ).items():
         setattr(member, field, value)
+    session.add(member)
     session.commit()
     logger.warning(
-        "Administrator has update user %s",
+        "Administrator has updated user %s",
         member.username,
     )
     return member
@@ -127,6 +128,6 @@ def delete_user(
     session.delete(member)
     session.commit()
     logger.warning(
-        "Administrator has delete user %s",
+        "Administrator has deleted user %s",
         member.username,
     )

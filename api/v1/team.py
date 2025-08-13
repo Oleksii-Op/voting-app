@@ -55,7 +55,7 @@ def list_team_users(
     ],
 ):
     members: list[Member] = team.members
-    if members is None:
+    if not members:
         raise HTTPException(
             status_code=404,
             detail="Empty team",
