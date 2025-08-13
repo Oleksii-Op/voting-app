@@ -38,24 +38,13 @@ an error will be thrown, otherwise - success
 
 Or a member can remove his vote using POST /v1/voting/rollback/ endpoint
 
+A member may belong to no team, but still vote for a team 
 
 
+A team has a name and an avatar URL which must be displayed
 
 
 ## Admin panel
 An admin can create, update, read and delete teams or members or somehow manipulate the data
 But there are some restriction, like when a used is not related to a team but "has_joined" flag
 is set to "True" - in that case an error will be thrown and the operation will be rolled back.
-
-      "name": "string",
-      "username": "string",
-      "has_joined_team": false,
-      "has_voted": false,
-      "token": "string",
-      "team_id": 0
-
-Mandatory fields to create a user using admin panel
-1. name
-2. username
-3. token
-The rest will be None by default
