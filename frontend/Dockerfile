@@ -23,9 +23,6 @@ RUN npm run build
 # Production stage with nginx
 FROM nginx:stable-alpine
 
-# Remove default nginx static assets
-RUN rm -rf /usr/share/nginx/html/*
-
 # Copy built assets from builder stage
 COPY --from=builder /app/dist /usr/share/nginx/html
 
@@ -33,6 +30,7 @@ COPY --from=builder /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
 
 # Expose ports
-EXPOSE 80 443
+
+EXPOSE 3000
 
 CMD ["nginx", "-g", "daemon off;"]

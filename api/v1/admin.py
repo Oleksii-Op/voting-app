@@ -19,6 +19,26 @@ router = APIRouter(
 )
 
 
+@router.get(
+    "/verify",
+    status_code=status.HTTP_200_OK,
+)
+def verify_admin_access():
+    """
+    Verify admin API key access.
+    
+    Returns:
+        dict: Success message confirming valid API key
+    
+    Security:
+        Requires admin API key authentication via x-api-key header
+    
+    Usage:
+        Frontend uses this endpoint to verify admin access before showing admin panel
+    """
+    return {"message": "Admin access verified", "authenticated": True}
+
+
 # Secured endpoint, we dont want the other to see who they voted for
 @router.get(
     "/members",

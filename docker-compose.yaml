@@ -1,0 +1,26 @@
+services:
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    environment:
+      CONFIG__ADMIN__APIKEY: 1488
+      CONFIG__DB__URL: "sqlite:///database:sqlite3:"
+
+  reverse-proxy:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    container_name: nginx
+    domainname: nginx
+    volumes:
+      - ./frontend/nginx.conf:/etc/nginx/nginx.conf
+      - ./nginx/ssl/:/etc/nginx/ssl/
+    environment:
+      VITE_API_BASE_URL: https://nginx:443
+    ports:
+      - "443:443"
+      - "80:80"

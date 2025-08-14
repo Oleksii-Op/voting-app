@@ -157,10 +157,10 @@ class VotingAPIClient {
     })
   }
 
-  // Utility Methods
+  // Admin Authentication
   async validateApiKey(apiKey: string): Promise<boolean> {
     try {
-      await this.client.get('/admin/members', {
+      await this.client.get('/admin/verify', {
         headers: { 'x-api-key': apiKey }
       })
       return true
